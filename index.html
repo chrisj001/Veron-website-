@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-padding-top: 80px;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veron - Build Websites & Apps Without Code</title>
+
+    <meta name="description"
+        content="Build stunning websites and apps without coding. Veron's drag-and-drop platform empowers creators and businesses to bring their digital ideas to life.">
+    <meta property="og:title" content="Veron - Build Without Code">
+    <meta property="og:description" content="The intuitive drag-and-drop platform for creators.">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/x-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+    <style>
+        /* CSS RESET: Standard practice to remove browser default spacing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            /* Prevents unwanted horizontal scrolling */
+        }
+
+        /* HERO GRADIENT: Features a background linear gradient and a subtle SVG grid overlay */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        /* LAYOUT CONTAINER: Keeps content centered and prevents it from touching the edges */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* STICKY HEADER: Stays at the top with a glass-morphism effect (blur) */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .about-section {
+            padding: 100px 0;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .about-toggle {
+            cursor: pointer;
+        }
+
+        /* LOGO: Uses a gradient clip so the text itself is colorful */
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* MOBILE MENU ICON: Hidden on desktop, triggered via Media Query */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #764ba2;
+            border-radius: 2px;
+        }
+
+        /* BUTTONS: Reusable Call-To-Action style */
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* HERO SECTION: The main "hook" of the page */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* FEATURES: Uses CSS Grid to automatically wrap cards based on screen size */
+        .features {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: white;
+        }
+
+        /* STATS ANIMATION: Initially invisible; JS adds the 'visible' class on scroll */
+        .stats {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #444;
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        /* RESPONSIVE BREAKPOINT: Styles for screens narrower than 768px */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                order: 2;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            /* Shown when JS toggles this class */
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .cta-button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Veron</div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="form.html" class="cta-button">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero gradient-bg">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Build Stunning Websites & Apps<br>Without Writing Code</h1>
+                    <p>Veron empowers creators and entrepreneurs to bring digital ideas to life with our intuitive
+                        drag-and-drop platform.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <a href="#" class="cta-button">Start Building Free</a>
+                        <a href="#" class="cta-button" id="openVideo"
+                            style="background: transparent; border: 2px solid white;">Watch Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><span role="img" aria-label="design">🎨</span></div>
+                        <h3>Drag & Drop</h3>
+                        <p>Create beautiful layouts with our visual editor.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><span role="img" aria-label="mobile">📱</span></div>
+                        <h3>Mobile-First</h3>
+                        <p>Automatically optimized for every device screen.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><span role="img" aria-label="security">🛡️</span></div>
+                        <h3>Secure</h3>
+                        <p>Enterprise-grade security and SSL included.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="stats">>
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>500+</h3>
+                        <p>Websites Created</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>99.9%</h3>
+                        <p>Uptime</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title about-toggle">About Veron</h2>
+            <div class="about-content">
+                <p>
+                    Veron is a revolutionary no-code platform designed to empower creators, entrepreneurs, and small
+                    businesses to bring their digital ideas to life quickly and efficiently. With an intuitive
+                    drag-and-drop interface, users can build stunning websites and apps without writing a single line of
+                    code. Veron focuses on performance, security, and mobile responsiveness to ensure every project
+                    looks professional across all devices. We believe technology should be accessible to everyone,
+                    removing barriers to innovation and creativity. By combining powerful customization tools with
+                    enterprise-grade reliability, Veron bridges imagination and execution. Users gain complete control
+                    over their digital presence while saving time, cost, and development complexity. Whether launching a
+                    startup, personal brand, or enterprise solution, Veron provides the foundation to build confidently
+                    and scale effortlessly.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Builder</a></li>
+                        <li><a href="#">Templates</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Veron. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. MOBILE MENU TOGGLE: Switches the 'active' class to show/hide the menu
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // 2. SMOOTH SCROLLING: Intercepts link clicks to scroll gracefully instead of jumping
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                navLinks.classList.remove('active'); // Auto-close menu on mobile after click
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // 3. STATS ANIMATION (INTERSECTION OBSERVER)
+        // This triggers the fade-in animation only when the element enters the user's view
+
+        const observerOptions = { threshold: 0.5 }; // Trigger when 50% of the element is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // 4. HEADER SCROLL EFFECT: Adds a shadow to the header once the user scrolls down
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.boxShadow = window.scrollY > 50 ? '0 2px 20px rgba(0,0,0,0.1)' : 'none';
+        });
+        // Toggle About section visibility
+        const aboutToggle = document.querySelector('.about-toggle');
+        const aboutContent = document.querySelector('.about-content');
+
+        aboutToggle.addEventListener('click', () => {
+            if (aboutContent.style.display === "none" || aboutContent.style.display === "") {
+                aboutContent.style.display = "block";
+            } else {
+                aboutContent.style.display = "none";
+            }
+        });
+        // Video Modal Functionality
+
+    </script>
+    <!-- FORM MODAL -->
+    <div id="formModal"
+        style="display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000;">
+        <div
+            style="background:white; padding:40px; border-radius:10px; max-width:400px; width:90%; position:relative; box-shadow:0 5px 20px rgba(0,0,0,0.2);">
+            <button id="closeModal"
+                style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            <h2 style="margin-bottom:20px; text-align:center;">Get Started</h2>
+            <form id="signupForm">
+                <input type="text" name="name" placeholder="Your Name" required
+                    style="width:100%; padding:12px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+                <input type="email" name="email" placeholder="Email Address" required
+                    style="width:100%; padding:12px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+                <input type="password" name="password" placeholder="Password" required
+                    style="width:100%; padding:12px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc;">
+                <button type="submit"
+                    style="width:100%; padding:12px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:5px; cursor:pointer;">Submit</button>
+            </form>
+        </div>
+    </div>
+    <!-- VIDEO MODAL -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-container">
+            <span class="close-video">&times;</span>
+            <video id="demoVideo" controls>
+                <source src="videos/demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</body>
+
+</html>
